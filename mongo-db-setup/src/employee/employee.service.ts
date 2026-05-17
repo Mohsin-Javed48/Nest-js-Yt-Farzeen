@@ -21,7 +21,6 @@ export class EmployeeService {
       name: 'Jane Doe',
       profile: profile._id,
     }).save();
-    console.log(employee);
     return employee;
   }
 

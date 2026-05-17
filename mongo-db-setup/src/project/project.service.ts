@@ -11,31 +11,42 @@ export class ProjectService {
     @InjectModel(Project.name) private projectModel: Model<Project>,
   ) {}
 
-  async seed(): Promise<{dev1: Developer, dev2: Developer}> {
+  async seed(): Promise<{ dev1: Developer; dev2: Developer }> {
     const [project1, project2] = await Promise.all([
-        this.projectModel.create({ title: 'Project A' }),
-        this.projectModel.create({ title: 'Project B' }),
-    ])
+      this.projectModel.create({ title: 'Project A' }),
+      this.projectModel.create({ title: 'Project B' }),
+    ]);
 
-    const [dev1, dev2] =  await Promise.all([
-        this.developerModel.create({
-            name: 'Alice',
-            projects: [project1._id, project2._id]
-        }),
-        this.developerModel.create({
-            name: 'Bob',
-            projects: [project1._id]
-        })
-    ])
-      return {dev1, dev2}   
+    const [dev1, dev2] = await Promise.all([
+      this.developerModel.create({
+        name: 'Alice',
+        projects: [project1._id, project2._id],
+      }),
+      this.developerModel.create({
+        name: 'Bob',
+        projects: [project1._id],
+      }),
+    ]);
+    await Promise.all([
+      this.projectModel.findByIdAndUpdate(project1._id, {
+        $push: { developers: dev1._id },
+      }),
+      this.projectModel.findByIdAndUpdate(project1._id, {
+        $push: { developers: dev2._id },
+      }),
+      this.projectModel.findByIdAndUpdate(project2._id, {
+        $push: { developers: dev1._id },
+      }),
+    ]);
 
-    }
+    return { dev1, dev2 };
   }
 
-  async createProject() : Promise<Project> {
-    const developer1 = await new this.developerModel({
-        name: 'Alice',
+  async getDevelopers(): Promise<Developer[]> {
+    return this.developerModel.find().populate('projects').lean(); // .lean() returns plain JavaScript objects instead of Mongoose documents
+  }
 
-    })
+  async getProjects(): Promise<Project[]> {
+    return this.projectModel.find().populate('developers').lean();
   }
 }
