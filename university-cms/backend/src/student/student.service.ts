@@ -13,11 +13,14 @@ export class StudentService {
 
   async getStudents(): Promise<Student[]> {
     // Use this.studentModel instead of the Student class
-    return await this.studentModel.find().exec();
+    return await this.studentModel.find().populate('courses').exec();
   }
 
   async getStudentById(id: number): Promise<Student> {
-    const student = await this.studentModel.findOne({ studentId: id }).exec();
+    const student = await this.studentModel
+      .findOne({ studentId: id })
+      .populate('courses')
+      .exec();
 
     if (!student) {
       throw new NotFoundException(`Student with ID ${id} not found`);

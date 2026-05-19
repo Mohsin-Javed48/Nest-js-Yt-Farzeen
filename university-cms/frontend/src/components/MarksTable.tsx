@@ -21,28 +21,28 @@ export default function MarksTable({
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full table-auto divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+    <div className="overflow-x-auto rounded-xl border border-slate-200">
+      <table className="cms-data-table">
+        <thead>
           <tr>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Subject</th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Marks</th>
+            <th>Subject</th>
+            <th>Marks</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody>
           {local.map((m, i) => (
-            <tr key={m.subject}>
-              <td className="px-4 py-3 text-sm text-gray-800">{m.subject}</td>
-              <td className="px-4 py-3 text-sm text-gray-600">
+            <tr key={m.subject} className="bg-white even:bg-slate-50/60">
+              <td className="font-medium text-slate-800">{m.subject}</td>
+              <td className="text-slate-700">
                 {editable ? (
                   <input
                     type="number"
                     value={m.marks}
                     onChange={(e) => updateMark(i, Number(e.target.value))}
-                    className="w-24 rounded border-gray-300 px-2 py-1"
+                    className="cms-input w-28 py-1.5"
                   />
                 ) : (
-                  m.marks
+                  <span className="cms-chip">{m.marks}%</span>
                 )}
               </td>
             </tr>
@@ -50,10 +50,10 @@ export default function MarksTable({
         </tbody>
       </table>
       {editable && (
-        <div className="mt-4">
+        <div className="mt-4 px-1 pb-1">
           <button
             onClick={() => onSave && onSave(local)}
-            className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+            className="cms-button cms-button-primary"
           >
             Save Marks
           </button>

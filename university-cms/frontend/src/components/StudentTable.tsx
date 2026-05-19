@@ -11,25 +11,25 @@ export default function StudentTable({
   onRowClick?: (id: string) => void;
 }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full table-auto divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+    <div className="overflow-x-auto rounded-xl border border-slate-200">
+      <table className="cms-data-table">
+        <thead>
           <tr>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Name</th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Email</th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Roll</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roll</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody>
           {students.map((s) => (
             <tr
               key={s.id}
-              className="cursor-pointer hover:bg-gray-50"
+              className="cursor-pointer bg-white transition-colors hover:bg-teal-50/45"
               onClick={() => onRowClick && onRowClick(s.id)}
             >
-              <td className="px-4 py-3 text-sm text-gray-800">{s.name}</td>
-              <td className="px-4 py-3 text-sm text-gray-600">{s.email}</td>
-              <td className="px-4 py-3 text-sm text-gray-600">{s.roll}</td>
+              <td className="font-medium text-slate-800">{s.name}</td>
+              <td className="text-slate-600">{s.email}</td>
+              <td className="text-slate-600">{s.roll}</td>
             </tr>
           ))}
         </tbody>

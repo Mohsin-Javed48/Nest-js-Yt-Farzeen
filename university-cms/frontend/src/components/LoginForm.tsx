@@ -15,29 +15,31 @@ export default function LoginForm({ onLogin }: { onLogin: (email: string, passwo
       className="space-y-4"
     >
       <div>
-        <label className="block text-sm font-medium text-gray-700">Email</label>
+        <label className="block text-sm font-semibold text-slate-700">Email</label>
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
           required
-          className="mt-1 w-full rounded border-gray-300 shadow-sm"
+          placeholder="name@univ.edu"
+          className="cms-input mt-1"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Password</label>
+        <label className="block text-sm font-semibold text-slate-700">Password</label>
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           required
-          className="mt-1 w-full rounded border-gray-300 shadow-sm"
+          placeholder="Enter your password"
+          className="cms-input mt-1"
         />
       </div>
       <div>
-        <button className="w-full rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">Login</button>
+        <button className="cms-button cms-button-primary w-full">Login</button>
       </div>
-      <div className="text-sm text-gray-500">Tip: use an email containing "teacher" to login as teacher.</div>
+      <div className="text-xs text-slate-500">Tip: use an email containing "teacher" to login as teacher.</div>
     </form>
   );
 }

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Student {
@@ -25,7 +25,13 @@ export class Student {
   phone!: string;
 
   @Prop({ type: Number, min: 0, max: 4.0 })
-  Cgpa!: number;
+  cgpa!: number;
+
+  @Prop({ type: [Types.ObjectId], ref: 'Course', default: [] })
+  courses!: Types.ObjectId[]; // Array of course IDs
+
+  @Prop({ default: true })
+  isActive!: boolean;
 }
 export type StudentDocument = Student & Document;
 

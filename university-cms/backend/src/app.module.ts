@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StudentModule } from './student/student.module';
+import { CourseModule } from './course/course.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { StudentModule } from './student/student.module';
     MongooseModule.forRoot(process.env.MONGO_URI!),
     // 3. Import your Feature Modules
     StudentModule,
+    CourseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

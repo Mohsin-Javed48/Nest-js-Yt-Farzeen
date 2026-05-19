@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [backendHealth, setBackendHealth] = useState<string>('Checking...');
@@ -20,35 +21,63 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100">
-      <div className="rounded-lg bg-white p-8 shadow-lg">
-        <h1 className="mb-4 text-4xl font-bold text-gray-800">
-          University CMS
-        </h1>
-        <p className="mb-6 text-gray-600">
-          Welcome to the University Content Management System
-        </p>
-        <div className="mt-6">
-          <a
-            href="/login"
-            className="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-          >
-            Go to Login
-          </a>
-        </div>
-        <div className="space-y-4">
-          <div className="rounded bg-green-100 p-3">
-            <p className="text-green-800">
-              ✅ Frontend is running on port 3000
-            </p>
+    <main className="py-8 md:py-12">
+      <section className="cms-container grid gap-6 md:grid-cols-[1.45fr_1fr]">
+        <article className="cms-card cms-rise p-6 md:p-8" style={{ boxShadow: 'var(--shadow)' }}>
+          <span className="cms-chip mb-4">Academic Operations Hub</span>
+          <h1 className="cms-heading text-3xl font-bold leading-tight md:text-5xl">
+            University CMS Control Center
+          </h1>
+          <p className="cms-subtext mt-4 max-w-xl text-sm md:text-base">
+            Manage student records, grading workflows, and instructor-level updates with a fast,
+            structured interface inspired by modern enterprise CMS platforms.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/login" className="cms-button cms-button-primary">
+              Enter Dashboard
+            </Link>
+            <Link href="/teacher" className="cms-button cms-button-secondary">
+              Preview Teacher Panel
+            </Link>
           </div>
-          <div className="rounded bg-blue-100 p-3">
-            <p className="text-blue-800">
-              Backend status: {backendHealth}
-            </p>
+        </article>
+
+        <aside className="cms-rise-delay grid gap-4">
+          <div className="cms-card p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">System Health</p>
+            <p className="mt-2 text-2xl font-bold text-slate-800">Frontend Online</p>
+            <p className="cms-subtext mt-1 text-sm">Port 3000 status is active.</p>
+          </div>
+          <div className="cms-card p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">API Connection</p>
+            <p className="mt-2 text-2xl font-bold text-slate-800">{backendHealth}</p>
+            <p className="cms-subtext mt-1 text-sm">Real-time backend status from health endpoint.</p>
+          </div>
+          <div className="cms-card p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Experience</p>
+            <p className="mt-2 text-sm text-slate-700">Purpose-built cards, elevated tables, and responsive dashboard sections.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section className="cms-container mt-6 md:mt-8">
+        <div className="cms-card p-5 md:p-6">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Role-Based Access</p>
+              <p className="cms-subtext mt-1 text-sm">Separate student and teacher workflows.</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Marks Workflow</p>
+              <p className="cms-subtext mt-1 text-sm">Quickly review and update subject marks.</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Clean Information Density</p>
+              <p className="cms-subtext mt-1 text-sm">Readable data layout optimized for daily operations.</p>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }

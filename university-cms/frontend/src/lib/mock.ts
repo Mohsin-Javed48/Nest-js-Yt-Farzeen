@@ -46,7 +46,7 @@ const students: Student[] = [
 
 let data = students.map((s) => ({ ...s }));
 
-export function login(email: string, password: string) {
+export function login(email: string, _password: string) {
   // Very simple mock login: teacher if email contains "teacher", else student
   if (email.includes('teacher')) {
     const teacher = { role: 'teacher', name: 'Prof. Martin' };
