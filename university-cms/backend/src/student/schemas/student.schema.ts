@@ -19,10 +19,10 @@ export class Student {
   address!: string;
 
   @Prop({ required: true, unique: true })
-  cnic!: string;
+  cnic!: number;
 
-  @Prop()
-  phone!: string;
+  @Prop({ required: true, unique: true, minlength: 8, maxlength: 14 })
+  phone!: number;
 
   @Prop({ type: Number, min: 0, max: 4.0 })
   cgpa!: number;

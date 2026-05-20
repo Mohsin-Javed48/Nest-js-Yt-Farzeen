@@ -6,7 +6,11 @@ import {
   IsNumber,
   Length,
   Matches,
+  IsArray,
+  IsBoolean,
+  IsOptional,
 } from 'class-validator';
+
 export class CreateStudentDto {
   @IsInt()
   studentId!: number;
@@ -16,15 +20,15 @@ export class CreateStudentDto {
   name!: string;
 
   @IsString()
-  @IsNotEmpty()
-  fatherName!: string;
+  @IsOptional()
+  fatherName?: string;
 
   @IsEmail()
   email!: string;
 
   @IsString()
-  @IsNotEmpty()
-  address!: string;
+  @IsOptional()
+  address?: string;
 
   @IsString()
   @Length(13, 13)
@@ -35,6 +39,16 @@ export class CreateStudentDto {
   @Length(10, 15)
   phone!: string;
 
+  @IsOptional()
   @IsNumber()
-  Cgpa!: number;
+  cgpa!: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  courses!: string[]; // Array of course IDs
+
+  @IsOptional()
+  @IsBoolean()
+  isActive!: boolean;
 }

@@ -1,22 +1,34 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Marks } from '../lib/mock';
+import React, { useEffect, useState } from "react";
+import type { Mark } from "../lib/types";
 
 export default function MarksTable({
   marks,
   editable = false,
   onSave,
 }: {
-  marks: Marks[];
+  marks: Mark[];
   editable?: boolean;
-  onSave?: (marks: Marks[]) => void;
+  onSave?: (marks: Mark[]) => void;
 }) {
-  const [local, setLocal] = useState<Marks[]>(marks.map((m) => ({ ...m })));
+  const [local, setLocal] = useState<Mark[]>(marks.map((m) => ({ ...m })));
 
-  function updateMark(idx: number, value: number) {
+  useEffect(() => {
+    setLocal(marks.map((m) => ({ ...m })));
+  }, [marks]);
+
+  function updateMark(
+    idx: number,
+    field: "marksObtained" | "grade",
+    value: string | number,
+  ) {
     const copy = local.map((m) => ({ ...m }));
-    copy[idx].marks = value;
+    if (field === "marksObtained") {
+      copy[idx].marksObtained = Number(value);
+    } else {
+      copy[idx].grade = String(value);
+    }
     setLocal(copy);
   }
 
@@ -25,25 +37,57 @@ export default function MarksTable({
       <table className="cms-data-table">
         <thead>
           <tr>
-            <th>Subject</th>
+            <th>Course</th>
             <th>Marks</th>
+            <th>Grade</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {local.map((m, i) => (
-            <tr key={m.subject} className="bg-white even:bg-slate-50/60">
-              <td className="font-medium text-slate-800">{m.subject}</td>
+            <tr
+              key={m.id ?? m._id ?? `${m.studentId}-${m.courseId}`}
+              className="bg-white even:bg-slate-50/60"
+            >
+              <td className="font-medium text-slate-800">
+                {m.courseName ?? m.courseId}
+              </td>
               <td className="text-slate-700">
                 {editable ? (
                   <input
                     type="number"
-                    value={m.marks}
-                    onChange={(e) => updateMark(i, Number(e.target.value))}
+                    value={m.marksObtained}
+                    onChange={(e) =>
+                      updateMark(i, "marksObtained", Number(e.target.value))
+                    }
                     className="cms-input w-28 py-1.5"
                   />
                 ) : (
-                  <span className="cms-chip">{m.marks}%</span>
+                  <span className="cms-chip">{m.marksObtained}%</span>
                 )}
+              </td>
+              <td className="text-slate-700">
+                {editable ? (
+                  <input
+                    type="text"
+                    value={m.grade}
+                    onChange={(e) => updateMark(i, "grade", e.target.value)}
+                    className="cms-input w-20 py-1.5"
+                  />
+                ) : (
+                  <span className="cms-chip">{m.grade}</span>
+                )}
+              </td>
+              <td className="text-slate-700">
+                <span
+                  className={
+                    m.isActive === false
+                      ? "inline-flex rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-600"
+                      : "cms-chip"
+                  }
+                >
+                  {m.isActive === false ? "Inactive" : "Active"}
+                </span>
               </td>
             </tr>
           ))}
@@ -55,7 +99,7 @@ export default function MarksTable({
             onClick={() => onSave && onSave(local)}
             className="cms-button cms-button-primary"
           >
-            Save Marks
+            Save Changes
           </button>
         </div>
       )}

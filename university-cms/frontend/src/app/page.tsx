@@ -1,25 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
-  const [backendHealth, setBackendHealth] = useState<string>('Checking...');
-
-  useEffect(() => {
-    const checkBackend = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/health');
-        const data = await response.json();
-        setBackendHealth(data.status);
-      } catch (error) {
-        setBackendHealth('Backend connection failed');
-      }
-    };
-
-    checkBackend();
-  }, []);
-
   return (
     <main className="py-8 md:py-12">
       <section className="cms-container grid gap-6 md:grid-cols-[1.45fr_1fr]">
@@ -50,12 +33,12 @@ export default function Home() {
           </div>
           <div className="cms-card p-5">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">API Connection</p>
-            <p className="mt-2 text-2xl font-bold text-slate-800">{backendHealth}</p>
-            <p className="cms-subtext mt-1 text-sm">Real-time backend status from health endpoint.</p>
+            <p className="mt-2 text-2xl font-bold text-slate-800">Local Data Mode</p>
+            <p className="cms-subtext mt-1 text-sm">The UI is driven by mock student and course data shaped after the backend schema.</p>
           </div>
           <div className="cms-card p-5">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Experience</p>
-            <p className="mt-2 text-sm text-slate-700">Purpose-built cards, elevated tables, and responsive dashboard sections.</p>
+            <p className="mt-2 text-sm text-slate-700">Purpose-built cards, elevated tables, and responsive dashboard sections aligned to student and course records.</p>
           </div>
         </aside>
       </section>

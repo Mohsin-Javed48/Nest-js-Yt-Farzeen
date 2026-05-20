@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StudentModule } from './student/student.module';
 import { CourseModule } from './course/course.module';
+import { MarksModule } from './marks/marks.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CourseModule } from './course/course.module';
     // 3. Import your Feature Modules
     StudentModule,
     CourseModule,
+    MarksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

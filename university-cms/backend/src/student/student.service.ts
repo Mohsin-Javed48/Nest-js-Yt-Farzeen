@@ -31,11 +31,26 @@ export class StudentService {
 
   async createStudent(student: CreateStudentDto): Promise<Student> {
     const newStudent = new this.studentModel(student);
+    console.log('Creating student:', newStudent); // Debug log
     return newStudent.save();
   }
 
   @Get('api/health')
   health(): { status: string } {
     return { status: 'Backend is healthy' };
+  }
+
+  async enrollCourse(courseId: string, studentId: string): Promise<Student> {
+    const student = await this.studentModel.findByIdAndUpdate(
+      studentId,
+      { $push: { courses: courseId } },
+      { new: true },
+    );
+
+    if (!student) {
+      throw new NotFoundException(`Student with ID ${studentId} not found`);
+    }
+
+    return student;
   }
 }

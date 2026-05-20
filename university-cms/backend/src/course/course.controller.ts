@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Param } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { Course } from './Schemas/course.schema';
 
@@ -9,5 +9,13 @@ export class CourseController {
   @Post()
   async createCourse(@Body() courseData: Partial<Course>): Promise<Course> {
     return this.courseService.createCourse(courseData);
+  }
+
+  @Post(':courseId/enroll/:studentId')
+  async enrollStudent(
+    @Param('courseId') courseId: string,
+    @Param('studentId') studentId: string,
+  ): Promise<any> {
+    return this.courseService.enrollStudent(courseId, studentId);
   }
 }

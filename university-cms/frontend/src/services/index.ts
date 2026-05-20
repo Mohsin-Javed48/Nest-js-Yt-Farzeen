@@ -2,9 +2,10 @@
 export { authService } from './authService';
 export { studentService } from './studentService';
 export { teacherService } from './teacherService';
+export { marksService } from './marksService';
 export { http, apiClient, request } from './http';
 
 // Re-export types
 export type { LoginRequest, LoginResponse, RefreshTokenResponse } from './authService';
-export type { StudentProfile, StudentMarks, StudentMarksResponse } from './studentService';
-export type { StudentListItem, StudentMarksUpdate, BulkMarksUpdate } from './teacherService';
+export type { Student } from '../lib/types';
+export type { Course, Mark } from '../lib/types';
