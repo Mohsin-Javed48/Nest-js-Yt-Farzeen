@@ -26,7 +26,9 @@ export default function StudentDetailPage() {
       }
 
       const currentStudent = await studentService.getStudentById(studentId);
-      const allMarks = await marksService.getMarks();
+      const allMarks = await marksService.getMarks(
+        String(currentStudent.studentId),
+      );
       setStudent(currentStudent);
       setMarks(
         allMarks.filter(

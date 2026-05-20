@@ -3,6 +3,27 @@
 import React, { useEffect, useState } from "react";
 import type { Mark } from "../lib/types";
 
+function getCourseLabel(course: Mark["courseId"], courseName?: string) {
+  if (typeof course === "string") {
+    return courseName ?? course;
+  }
+
+  return (
+    course.courseName ??
+    course.courseCode ??
+    course._id ??
+    course.id ??
+    courseName ??
+    "Unknown course"
+  );
+}
+
+function getCourseKey(course: Mark["courseId"]) {
+  return typeof course === "string"
+    ? course
+    : course._id ?? course.id ?? course.courseCode;
+}
+
 export default function MarksTable({
   marks,
   editable = false,
@@ -46,11 +67,11 @@ export default function MarksTable({
         <tbody>
           {local.map((m, i) => (
             <tr
-              key={m.id ?? m._id ?? `${m.studentId}-${m.courseId}`}
+              key={m.id ?? m._id ?? `${m.studentId}-${getCourseKey(m.courseId)}`}
               className="bg-white even:bg-slate-50/60"
             >
               <td className="font-medium text-slate-800">
-                {m.courseName ?? m.courseId}
+                {getCourseLabel(m.courseId, m.courseName)}
               </td>
               <td className="text-slate-700">
                 {editable ? (

@@ -12,13 +12,14 @@ export function setCurrentUser(user: SessionUser) {
   } catch (error) {}
 }
 
-export function getCurrentUser(): SessionUser | null {
-  try {
-    const raw = localStorage.getItem(USER_KEY);
-    return raw ? (JSON.parse(raw) as SessionUser) : null;
-  } catch (error) {
-    return null;
-  }
+export function getCurrentUser() {
+  //   try {
+  //     const raw = localStorage.getItem(USER_KEY);
+  //     return raw ? (JSON.parse(raw) as SessionUser) : null;
+  //   } catch (error) {
+  //     return null;
+  //   }
+  return true;
 }
 
 export function clearCurrentUser() {

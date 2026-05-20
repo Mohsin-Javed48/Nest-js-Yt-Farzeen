@@ -16,6 +16,11 @@ export class MarksController {
     return this.marksService.getMarks();
   }
 
+  @Get(':id')
+  async getMarksByStudentId(@Param('id') id: string): Promise<Mark[]> {
+    return this.marksService.getMarksByStudentId(id);
+  }
+
   @Put(':id')
   async updateMark(
     @Param('id') id: string,
@@ -23,5 +28,4 @@ export class MarksController {
   ): Promise<Mark> {
     return this.marksService.updateMark(id, markData);
   }
-
 }

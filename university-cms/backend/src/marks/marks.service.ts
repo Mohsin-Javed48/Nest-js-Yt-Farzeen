@@ -15,6 +15,20 @@ export class MarksService {
   async getMarks(): Promise<Mark[]> {
     return this.marksModel.find().exec();
   }
+
+  async getMarksByStudentId(studentId: string): Promise<Mark[]> {
+    const marks = await this.marksModel
+      .find({ studentId })
+      .populate('courseId').lean()
+      .exec();
+
+    if (!marks || marks.length === 0) {
+      throw new NotFoundException(`No marks found for student id ${studentId}`);
+    }
+
+    return marks;
+  }
+
   async updateMark(id: string, markData: Partial<Mark>): Promise<Mark> {
     const updated = await this.marksModel
       .findByIdAndUpdate(id, markData, { new: true })

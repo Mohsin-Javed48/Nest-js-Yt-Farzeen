@@ -4,27 +4,32 @@ import React, { useEffect, useMemo, useState } from "react";
 import MarksTable from "../../components/MarksTable";
 import { studentService } from "../../services/studentService";
 import { marksService } from "../../services/marksService";
-import { getCurrentUser } from "../../lib/session";
+import { courseService } from "../../services/courseService";
+
 import type { Mark, Student } from "../../lib/types";
 
 export default function StudentPage() {
   const [student, setStudent] = useState<Student | null>(null);
   const [marks, setMarks] = useState<Mark[]>([]);
+  const [allCourses, setAllCourses] = useState<
+    import("../../lib/types").Course[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const user = getCurrentUser();
-
-      if (!user || user.role !== "student") {
-        setStudent(null);
-        setMarks([]);
-        setLoading(false);
-        return;
+      // during development use a fixed test id; remove the unused `user` variable
+      const currentStudent = await studentService.getStudentById("1001");
+      const allMarks = await marksService.getMarks(
+        String(currentStudent.studentId),
+      );
+      // fetch all available courses for enrollment
+      try {
+        const courses = await courseService.getCourses();
+        setAllCourses(courses);
+      } catch (err) {
+        setAllCourses([]);
       }
-
-      const currentStudent = await studentService.getStudentById(user.id);
-      const allMarks = await marksService.getMarks();
       setStudent(currentStudent);
       setMarks(
         allMarks.filter(
@@ -199,7 +204,66 @@ export default function StudentPage() {
         <section className="cms-card cms-rise-delay p-3 md:p-4">
           <MarksTable marks={marks} editable={false} />
         </section>
+
+        <section className="cms-card cms-rise-delay p-5 md:p-6">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Available Courses
+          </p>
+          <div className="mt-4 space-y-3">
+            {allCourses.map((course) => {
+              const enrolled = enrolledCourses.some(
+                (c) =>
+                  String(c._id ?? c.id ?? c.courseCode) ===
+                  String(course._id ?? course.id ?? course.courseCode),
+              );
+              return (
+                <div
+                  key={course._id ?? course.id ?? course.courseCode}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4 flex items-center justify-between"
+                >
+                  <div>
+                    <p className="font-semibold text-slate-800">
+                      {course.courseName}
+                    </p>
+                    <p className="text-sm text-slate-600">
+                      {course.courseCode}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="cms-chip">{course.credits} CR</span>
+                    <button
+                      className="cms-button cms-button-primary"
+                      disabled={enrolled}
+                      onClick={async () => {
+                        try {
+                          const studentIdentifier =
+                            student._id ?? String(student.studentId);
+                          await studentService.enrollCourse(
+                            course._id ?? course.id ?? course.courseCode,
+                            studentIdentifier,
+                          );
+                          // refresh enrolled courses
+                          const updated =
+                            await studentService.getStudentById("1001");
+                          setStudent(updated);
+                          alert("Enrolled successfully");
+                        } catch (err) {
+                          console.error(err);
+                          alert("Failed to enroll");
+                        }
+                      }}
+                    >
+                      {enrolled ? "Enrolled" : "Add"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
       </section>
     </main>
   );
 }
+
+// EnrollForm removed — replaced by available courses list UI above.

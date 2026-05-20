@@ -6,8 +6,8 @@ export class Mark extends Document {
   @Prop({ required: true })
   studentId!: string;
 
-  @Prop({ required: true })
-  courseId!: string;
+  @Prop({ required: true, type: Types.ObjectId, ref: 'Course' })
+  courseId!: Types.ObjectId;
 
   @Prop({ required: true, min: 0, max: 100 })
   marksObtained!: number;
