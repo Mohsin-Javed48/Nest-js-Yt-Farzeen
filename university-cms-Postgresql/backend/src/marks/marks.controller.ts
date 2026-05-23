@@ -1,5 +1,5 @@
 import { Controller, Post, Get, Put, Body, Param } from '@nestjs/common';
-import { Mark } from './schemas/marks.schema';
+import { Mark } from './mark.entity';
 import { MarksService } from './marks.service';
 
 @Controller('marks')

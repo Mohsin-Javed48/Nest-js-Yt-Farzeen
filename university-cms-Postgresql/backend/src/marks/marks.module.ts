@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MarksController } from './marks.controller';
 import { MarksService } from './marks.service';
-import { Mongoose } from 'mongoose';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Mark, MarkSchema } from './schemas/marks.schema';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Mark } from './mark.entity';
+import { Course } from '../course/course.entity';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Mark.name, schema: MarkSchema }]),
-  ],
+  imports: [TypeOrmModule.forFeature([Mark, Course])],
   controllers: [MarksController],
   providers: [MarksService],
 })

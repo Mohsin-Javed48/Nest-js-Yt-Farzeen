@@ -3,6 +3,7 @@ import type { Mark } from "../lib/types";
 
 export const marksService = {
   getMarks: async (studentId: string): Promise<Mark[]> => {
+    console.log("Fetching marks for studentId:", studentId);
     return http.get<Mark[]>(`/marks/${studentId}`);
   },
 

@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Param } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { Course } from './Schemas/course.schema';
-
+import { Course } from './course.entity';
 @Controller('course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
@@ -10,6 +9,8 @@ export class CourseController {
   async createCourse(@Body() courseData: Partial<Course>): Promise<Course> {
     return this.courseService.createCourse(courseData);
   }
+
+
 
   @Get()
   async getCourses(): Promise<Course[]> {

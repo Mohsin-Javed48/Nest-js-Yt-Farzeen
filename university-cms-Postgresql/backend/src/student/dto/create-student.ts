@@ -10,8 +10,10 @@ import {
   IsBoolean,
   IsOptional,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateStudentDto {
+  @Type(() => Number)
   @IsInt()
   studentId!: number;
 
@@ -39,6 +41,7 @@ export class CreateStudentDto {
   @Length(10, 15)
   phone!: string;
 
+  @Type(() => Number)
   @IsOptional()
   @IsNumber()
   cgpa!: number;
