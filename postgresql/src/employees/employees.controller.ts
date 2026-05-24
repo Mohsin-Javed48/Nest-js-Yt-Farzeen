@@ -8,9 +8,11 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { Employees } from './employees.entity';
+import { SupabaseAuthGuard } from 'src/auth/supabase-auth/supabase-auth.guard';
 
 @Controller('employees')
 export class EmployeesController {
@@ -21,6 +23,7 @@ export class EmployeesController {
     return this.employeesService.create(employeeData);
   }
 
+  @UseGuards(SupabaseAuthGuard)
   @Get()
   async findAll() {
     return this.employeesService.getAll();
@@ -33,7 +36,7 @@ export class EmployeesController {
   ): Promise<Employees[]> {
     return this.employeesService.search({ name, department });
   }
- 
+
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return this.employeesService.getById(id);
