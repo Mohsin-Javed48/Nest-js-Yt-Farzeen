@@ -24,8 +24,14 @@ export class CourseService {
 
   // Create course
   async createCourse(input: CreateCourseInput) {
+    const { enrolledStudents, ...courseData } = input;
     return this.prisma.course.create({
-      data: input,
+      data: {
+        ...courseData,
+        enrolledStudents: enrolledStudents
+          ? { connect: enrolledStudents.map((id) => ({ id })) }
+          : undefined,
+      },
     });
   }
 

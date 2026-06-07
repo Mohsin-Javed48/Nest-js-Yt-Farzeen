@@ -21,6 +21,4 @@ export class Mark {
   @Field()
   isActive!: boolean;
 
-  @Field(() => Course)
-  course!: Course;
 }
