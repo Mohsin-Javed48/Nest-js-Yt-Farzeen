@@ -1,54 +1,46 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { Course } from './course.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Student } from '../student/student.entity';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateCourseInput } from './dto/create-course.input';
 
 @Injectable()
 export class CourseService {
-  constructor(
-    @InjectRepository(Course)
-    private readonly courseRepository: Repository<Course>,
-    @InjectRepository(Student)
-    private readonly studentRepository: Repository<Student>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  async createCourse(courseData: Partial<Course>): Promise<Course> {
-    const createdCourse = this.courseRepository.create(courseData);
-    return this.courseRepository.save(createdCourse);
+  // Get all courses
+  async findAll() {
+    // return this.prisma.course.findMany();
+    return {
+      message:
+        'This is a placeholder response. Implement the findAll method to return actual courses from the database.',
+    };
   }
 
-  async getCourses(): Promise<any[]> {
-    return this.courseRepository.find({ relations: ['enrolledStudents'] });
+  // Get single course
+  async findOne(id: number) {
+    return this.prisma.course.findUnique({
+      where: { id },
+    });
   }
 
-  async enrollStudent(courseId: string, studentId: string): Promise<any> {
-    const course = await this.courseRepository.findOne({
-      where: { id: Number(courseId) },
-      relations: ['enrolledStudents'],
+  // Create course
+  async createCourse(input: CreateCourseInput) {
+    return this.prisma.course.create({
+      data: input,
     });
+  }
 
-    if (!course) {
-      throw new NotFoundException('Course not found');
-    }
-
-    const student = await this.studentRepository.findOneBy({
-      id: Number(studentId),
+  // Update course
+  async updateCourse(id: number, data: any) {
+    return this.prisma.course.update({
+      where: { id },
+      data,
     });
+  }
 
-    if (!student) {
-      throw new NotFoundException('Student not found');
-    }
-
-    const existing = course.enrolledStudents ?? [];
-    if (!existing.find((s) => s.id === student.id)) {
-      course.enrolledStudents = [...existing, student];
-      await this.courseRepository.save(course);
-    }
-
-    return this.courseRepository.findOne({
-      where: { id: course.id },
-      relations: ['enrolledStudents'],
+  // Delete course
+  async deleteCourse(id: number) {
+    return this.prisma.course.delete({
+      where: { id },
     });
   }
 }

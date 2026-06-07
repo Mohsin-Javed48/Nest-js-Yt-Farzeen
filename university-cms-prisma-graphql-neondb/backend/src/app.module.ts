@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config'; // Recommended for process.env
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { resolve } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { PrismaModule } from './prisma/prisma.module';
 import { StudentModule } from './student/student.module';
+import { MarkModule } from './mark/mark.module';
 import { CourseModule } from './course/course.module';
-import { MarksModule } from './marks/marks.module';
 
 @Module({
   imports: [
-    // 1. Setup ConfigModule to read .env files
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [
@@ -18,18 +19,15 @@ import { MarksModule } from './marks/marks.module';
         resolve(process.cwd(), '.env'),
       ],
     }),
-    // 2. Setup PostgreSQL connection for TypeORM entities
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.SUPABASE_URI ?? process.env.DATABASE_URL,
-      autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV !== 'production',
-      ssl: { rejectUnauthorized: false },
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: resolve(process.cwd(), 'src/schema.gql'),
+      playground: true,
     }),
-    // 3. Import your Feature Modules
+    PrismaModule,
     StudentModule,
+    MarkModule,
     CourseModule,
-    MarksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
