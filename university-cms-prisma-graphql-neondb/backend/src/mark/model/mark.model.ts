@@ -20,5 +20,4 @@ export class Mark {
 
   @Field()
   isActive!: boolean;
-
 }
